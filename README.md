@@ -1,10 +1,10 @@
-# Audio Gear Calibration
+# Analog Digital Level Calibration
 
 This repository contains some explanations and functionailities to calibrate digital to analog reference levels using [EBU R68](https://tech.ebu.ch/docs/r/r068.pdf) or [SMPT RP155](https://ieeexplore.ieee.org/document/7291101) [1] standard and Dolby calibration used in [K-System](http://www.ranchstudio.com/student/bob%20katz%20levels.pdf) [2, 3], which map -20dBFS(RMS) to 0VU or +4dBu in professional equipment.
 
 ## Table of contents
 
-- [Audio Gear Calibration](#audio-gear-calibration)
+- [Analog Digital Level Calibration](#analog-digital-level-calibration)
   - [Table of contents](#table-of-contents)
   - [General Info](#general-info)
   - [Setup](#setup)
