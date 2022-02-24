@@ -5,8 +5,8 @@ from pathlib import Path
 script_path = Path(__file__).resolve()
 
 
-def dbfs_to_voltage(dbfs: float, standard: ut.Standard) -> float:
-    dbu = ut.dbfs_to_dbu(dbfs, standard=standard)
+def dbfs_to_voltage(dbfs: float, standard: ut.Standard, custom_max_out=16) -> float:
+    dbu = ut.dbfs_to_dbu(dbfs, standard=standard, custom_max_out=custom_max_out)
     v_rms = ut.dbu_to_volts(dbu)
     v_peak = ut.rms_to_peak(v_rms)
     print(f"{dbfs} dBFS -> {dbu} dBu -> {round(v_rms, 3)} Vrms")

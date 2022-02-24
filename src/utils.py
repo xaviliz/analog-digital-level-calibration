@@ -14,13 +14,17 @@ class ExtendedEnum(Enum):
 class Standard(ExtendedEnum):
     EBU_R68 = "ebu_r68"
     SMPTE_RP155 = "smpte_rp155"
+    CUSTOM = "custom"
 
 
-def dbfs_to_dbu(dbfs: float, standard: str = "smpte_rp155") -> float:
+def dbfs_to_dbu(dbfs: float, standard: str = "smpte_rp155", custom_max_out=16) -> float:
     if standard == str(Standard.SMPTE_RP155):
         dbu = dbfs + 24
     elif standard == str(Standard.EBU_R68):
         dbu = dbfs + 18
+    elif standard == str(Standard.CUSTOM):
+        # sometimes soundcard manufacturers follow his own standard
+        dbu = dbfs + custom_max_out
     else:
         raise ValueError(
             f"Undefined standard: {standard}. Choices: {Standard.list()}"
@@ -28,11 +32,14 @@ def dbfs_to_dbu(dbfs: float, standard: str = "smpte_rp155") -> float:
     return dbu
 
 
-def dbu_to_dbfs(dbu: float, standard: str = None) -> float:
+def dbu_to_dbfs(dbu: float, standard: str = None, custom_max_out=16) -> float:
     if standard == str(Standard.SMPTE_RP155):
         dbfs = dbu - 24
     elif standard == str(Standard.EBU_R68):
         dbfs = dbu - 18
+    elif standard == str(Standard.CUSTOM):
+        # sometimes soundcard manufacturers follow his own standard
+        dbfs = dbu - custom_max_out
     else:
         raise ValueError(
             f"Undefined standard: {standard}. Choices: {Standard.list()}"
