@@ -1,23 +1,45 @@
 # Analog Digital Level Calibration
 
-This repository contains some explanations and functionailities to calibrate digital to analog reference levels using [EBU R68](https://tech.ebu.ch/docs/r/r068.pdf) or [SMPT RP155](https://ieeexplore.ieee.org/document/7291101) [1] standard and Dolby calibration used in [K-System](http://www.ranchstudio.com/student/bob%20katz%20levels.pdf) [2, 3], which map -20dBFS(RMS) to 0VU or +4dBu in professional equipment.
+This repository contains some explanations and functionalities to calibrate digital to analog reference levels using [EBU R68](https://tech.ebu.ch/docs/r/r068.pdf) or [SMPT RP155](https://ieeexplore.ieee.org/document/7291101) [1] standard and Dolby calibration used in [K-System](http://www.ranchstudio.com/student/bob%20katz%20levels.pdf) [2, 3], which map -20dBFS(RMS) to 0VU or +4dBu in professional equipment.
 
 ## Table of contents
 
 - [Analog Digital Level Calibration](#analog-digital-level-calibration)
   - [Table of contents](#table-of-contents)
   - [General Info](#general-info)
+    - [Balanced and unbalanced signals](#balanced-and-unbalanced-signals)
   - [Setup](#setup)
   - [Usage](#usage)
     - [Level list](#level-list)
   - [Converters](#converters)
     - [dBFS to Volts](#dbfs-to-volts)
-    - [Volts peak-to-peak to Volts RMS](#volts-peak-to-peak-to-volts-rms)
+    - [Volts peak to Volts RMS](#volts-peak-to-volts-rms)
   - [References](#references)
 
 ## General Info
 
-This repository explains the [calibration procedure](https:/www.github.com/xaviliz) to sample audio gear using a digital recorder with digital levels. Also it provides some functionalities to understand the level conversion and references between dBFS and dBu units using different standards (EBU R68 or SMPTE RP155).
+This repository provides a way to map digital to analog level scaling (dBFS to dBu). It might be useful to sample audio gear (referenced to voltage or dBu) using a soundcard with digital level scaling (dBFS). Also it provides some functionalities to understand the level conversion and references between dBFS and dBu units using different standards (*EBU R68*, *SMPTE RP155* or a customized one).
+
+Currently the soundcard's manufacturer don't use EBU R68 or SMPTE RP155 standards. However they always provide a **MAXIMUM OUTPUT LEVEL** in dBu that we can use to map signals from a dBFS scale.
+
+Here a list with different customized output level standards in different soundcards:
+
+| Manufacturer | Model | Maximum Output Level |
+| ------------ | ----- | ---------------------|
+| Focusrite | Scarlet 2i2 | +10dBu|
+| RME | UC | +2dBV, +13dBu and +19dBu |
+| UA | Apollo Twin MKII | +20.2dBu|
+| Audient | id4 | +12dBu |
+| Avid | HD I/O | +22dBu
+
+The table below shows only AVID HD I/O is following the SMPTE RP155 standard.
+It is clear the rest of manufacturers are applying customized standards that can generate differences in voltage levels if you reproduce the same signal with different soundcard.
+
+When we want to sample audio gear with a correlated scaling we should bear in mind the specifications provided by the manufacturer and apply the maximum output level to the converters of this repository.
+
+### Balanced and unbalanced signals
+
+Obviously it is different to sample a processor prepared for *TRS* cable (balanced signals) than an instrument like a synthesizer which are prepared for *TS* cables (unbalanced signals). Using TS cables will provide **-6dB** of the maximum output level.
 
 ## Setup
 
@@ -73,14 +95,14 @@ python level_list.py -b -58 -s ebu_r6
 
 ## Converters
 
-Sometimes, we also need to have some reference between the different scalings: dBFs-> dBu, Vpp -> Vrms (sinusoide)
+Sometimes, we also need to have some reference between the different scalings: dBFs-> dBu, Vpeak -> Vrms (for sinusoidal signal)
 
 ### dBFS to Volts
 
 ```bash
 python dbfs_to_volts.py -20
 >>> -20.0 dBFS -> 4.0 dBu -> 1.228 V
->>> 1.228 Vpp -> 0.869 Vrms
+>>> 1.228 Vpeak -> 0.869 Vrms
 ```
 
 or Volts to dBFS using `-i` flag
@@ -90,26 +112,26 @@ python dbfs_to_volts.py 1.2283 -i
 >>> 1.228 V -> 4.0 dBu -> -20.0 dBFS
 ```
 
-### Volts peak-to-peak to Volts RMS
+### Volts peak to Volts RMS
 
 ```bash
-python pp_to_rms.py 1.228
->>> 1.228 Vpp -> 0.868 Vrms
+python peak_to_rms.py 1.228
+>>> 1.228 Vpeak -> 0.868 Vrms
 ```
 
 or RMS to peak-to-peak:
 
 ```bash
-python pp_to_rms.py 0.868 -i
->>> 0.868 Vrms -> 1.228 Vpp
+python peak_to_rms.py 0.868 -i
+>>> 0.868 Vrms -> 1.228 Vpeak
 ```
 
 ## References
 
-[1] "RP 155:2014 - SMPTE Recommended Practice - Reference Levels for Analog and Digital Audio Systems," in RP 155:2014 , vol., no., pp.1-7, 29 Dec. 2014, doi: 10.5594/SMPTE.RP155.2014.
+"RP 155:2014 - SMPTE Recommended Practice - Reference Levels for Analog and Digital Audio Systems," in RP 155:2014 , vol., no., pp.1-7, 29 Dec. 2014, doi: 10.5594/SMPTE.RP155.2014.
 
-[2] Katz, B. (2000). Integrated approach to metering, monitoring, and leveling practices, part 1: Two-channel metering. Journal of the Audio Engineering Society, 48(9), 800-809.
+Katz, B. (2000). Integrated approach to metering, monitoring, and leveling practices, part 1: Two-channel metering. Journal of the Audio Engineering Society, 48(9), 800-809.
 
-[3] Katz, B., & Katz, R. A. (2003). Mastering audio: the art and the science. Butterworth-Heinemann.
+Katz, B., & Katz, R. A. (2003). Mastering audio: the art and the science. Butterworth-Heinemann.
 
-[4] Brixen, E. B. (2020). Audio Metering: Measurements, Standards, and Practice. Focal Press.
+Brixen, E. B. (2020). Audio Metering: Measurements, Standards, and Practice. Focal Press.
