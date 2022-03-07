@@ -23,12 +23,12 @@ def handle_args() -> dict:
     parser.add_argument(
         "voltage",
         type=float,
-        help="Voltage peak to peak value or RMS if invert is on.",
+        help="Voltage peak value or RMS if invert option is on.",
     )
     parser.add_argument(
         "-i",
         "--invert",
-        help=f"Invert functionality (rms to pp).",
+        help=f"Invert functionality (rms to peak).",
         action="store_true",
         required=False,
     )
