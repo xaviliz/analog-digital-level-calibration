@@ -27,7 +27,7 @@ Here a list with different customized output level standards in different soundc
 | Manufacturer | Model | Maximum Output Level |
 | ------------ | ----- | ---------------------|
 | Focusrite | Scarlet 2i2 | +10dBu|
-| RME | UC | +2dBV, +13dBu and +19dBu |
+| RME | UC - Fireface 400 | +2dBV, +13dBu and +19dBu |
 | UA | Apollo Twin MKII | +20.2dBu|
 | Audient | id4 | +12dBu |
 | Avid | HD I/O | +22dBu
